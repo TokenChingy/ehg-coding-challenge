@@ -108,7 +108,6 @@ const generate15BitColours = () => {
 
   // Generate the intensities for each channel in increments of 8.
   // The complexity of this is O(N^3), flattening this triple for loop would decrease complexity.
-  // TODO: Flatten the loops.
   for (let i = 0; i < 32; i++) {
     // Increment our red channel intensity.
     redChannel += 8;

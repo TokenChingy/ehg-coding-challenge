@@ -14,8 +14,8 @@ const App = () => {
   // Initiate the global state defaults.
   const initialState = {
     darkMode: true,
-    imageHeight: 256,
-    imageWidth: 128,
+    imageHeight: 128,
+    imageWidth: 256,
     orderingMethod: "hue",
   };
 
