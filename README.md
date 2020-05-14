@@ -62,7 +62,8 @@ The EHG Coding Challenge required a web application to be built using `React.JS`
 Initially it was intended to develop the entire application using `React.JS` to fullfil the task at its bare minimum, but there would be some issues with that:
 
 1. Generating an image on the frontend may impact the browser performance heavily, especially if serving to a mobile browser
-2. The implementation does not truly demonstrate the abilities of a Full Stack Developer (although understandably — the role is of a React Developer — it doesn't hurt to demonstrate other skills on-top)
+2. Setting an `<img />` tag allows for users to save the generated image to their device. Where as using the Canvas API to render the image will require additional steps to get it into an `<img />` tag.
+3. The implementation does not truly demonstrate the abilities of a Full Stack Developer (although understandably — the role is of a React Developer — it doesn't hurt to demonstrate other skills on-top)
 
 So in the end the solution involved building a small backend (without a database or file-store) to support the frontend by doing all the heavy lifting of generating the image.
 
