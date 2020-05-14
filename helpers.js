@@ -122,7 +122,7 @@ const generate15BitColours = () => {
         blueChannel += 8;
 
         // Assign the colour to the array of colours.
-        colours[colour] = [redChannel - 1, blueChannel - 1, greenChannel - 1];
+        colours[colour] = [redChannel - 1, greenChannel - 1, blueChannel - 1];
 
         // Increment the colour counter.
         colour++;
