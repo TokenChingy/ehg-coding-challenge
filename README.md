@@ -1,68 +1,92 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# EHG Coding Challenge: 32,768
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [EHG Coding Challenge: 32,768](#ehg-coding-challenge-32768)
+  - [Table of Contents](#table-of-contents)
+  - [Requirements](#requirements)
+    - [Environment](#environment)
+    - [Dependencies](#dependencies)
+    - [Development Dependencies](#development-dependencies)
+  - [Usage](#usage)
+  - [Challenge](#challenge)
+    - [Problem](#problem)
+    - [Solution](#solution)
+      - [Backend](#backend)
+      - [Frontend](#frontend)
 
-### `npm start`
+## Requirements
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Environment
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- `Node.JS`
+- `NPM`
 
-### `npm test`
+### Dependencies
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `body-parser`
+- `compression`
+- `express`
+- `morgan`
+- `react`
+- `react-dom`
+- `react-router-dom`
+- `react-scripts`
+- `sharp`
+- `gralig.css`
 
-### `npm run build`
+### Development Dependencies
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `concurrently`
+- `nodemon`
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Usage
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+In the terminal run:
 
-### `npm run eject`
+1. `npm install-client && npm install-api`
+2. `npm run start`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This should open a browser window showing the web application.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+> NOTE: This isn't ready for production, it's using a proxy from frontend to the backend. The frontend is being served by the development server used by `React.JS`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Challenge
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Problem
 
-## Learn More
+The EHG Coding Challenge required a web application to be built using `React.JS` and `Node.JS`. This web application needed to display a generated, aesthetically pleasing (or interesting) image in which each of the colours within the image occurred exactly once. Colours used in this image were also restricted to the `15 bit high colour space`. This hard requirement meant that in generating the image, the colour space was restricted to only 32768 colours. This restriction meant that there were only 28 possible image image sizes as determined by the divisors of 32768.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Solution
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Initially it was intended to develop the entire application using `React.JS` to fullfil the task at its bare minimum, but there would be some issues with that:
 
-### Code Splitting
+1. Generating an image on the frontend may impact the browser performance heavily, especially if serving to a mobile browser
+2. The implementation does not truly demonstrate the abilities of a Full Stack Developer (although understandably — the role is of a React Developer — it doesn't hurt to demonstrate other skills on-top)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+So in the end the solution involved building a small backend (without a database or file-store) to support the frontend by doing all the heavy lifting of generating the image.
 
-### Analyzing the Bundle Size
+#### Backend
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+The backend component (more of a microservice) is built using `Node.JS` utilizing the `Express.JS` framework, common `ExpresS.JS` middleware, and `Sharp` — an image processing library for `Node.JS`.
 
-### Making a Progressive Web App
+Only one route exists in this back-end and that is a `POST` route called `/colours`. This route is responsible for generating the image of correct size and correct ordering as per client request.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+The image generation has `O(N^3)` complexity due to the 3 deep nested `for` loops. Generating a random noise from the colours uses the `Fisher Yates Shuffling Algorithm` and is implemented with `O(N)` complexity. The HSL sort algorithms are at the mercy of `Chrome V8s` internal `Array.sort` implementations — believed to be `Tim Sort` which has a worst case complexity of `O(N)`.
 
-### Advanced Configuration
+Once the image has been generated and ordered, using `Sharp`, the image is shaped into the correct dimensions with 3 channels (since alpha doesn't exist in the `15 bit high colour space`), encoded as a `png` and the piped back into the response to the frontend for consumption as a `blob`.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+#### Frontend
 
-### Deployment
+The frontend is implemented using `React.JS`. The core goal of it is to query the backend for a generated image created to specification determined by the user of the web application.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+This frontend is has two main components that build up the core functionality.
 
-### `npm run build` fails to minify
+The first being the `Configurator` component that takes in a specified `height`, `width`, and `ordering`. These values are then saved to a global state in the `React.JS` application using a combination of `hooks`, and `context` APIs to be made available to other components. Using the `hooks` in combination with `context` APIs was far less complicated than setting up a `Redux` store.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+The second component is the `GeneratedImage` component. This component takes the image parameters and on an effect (`useEffect` hook), will query the backend using `fetch` through a `POST` request and await the response. Once the response is received and it's determined that it is a `blob`, an `<img />` is updated with a local `url` to the blob and the result is rendered to the user.
+
+Apart from the two core components that make up the frontend, there are auxillary components that were built to style the web application to provide a more pleasant UI/UX. These components encompass:
+
+- Routing for SPAs
+- The use of layouts and pages with nested routing
