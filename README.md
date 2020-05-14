@@ -71,7 +71,7 @@ So in the end the solution involved building a small backend (without a database
 
 The backend component (more of a microservice) is built using `Node.JS` utilizing the `Express.JS` framework, common `ExpresS.JS` middleware, and `Sharp` — an image processing library for `Node.JS`.
 
-Only one route exists in this back-end and that is a `POST` route called `/colours`. This route is responsible for generating the image of correct size and correct ordering as per client request.
+Only one route exists in this backend and that is a `POST` route called `/colours`. This route is responsible for generating the image of correct size and correct ordering as per client request.
 
 The image generation has `O(N^3)` complexity due to the 3 deep nested `for` loops. Generating a random noise from the colours uses the `Fisher Yates Shuffling Algorithm` and is implemented with `O(N)` complexity. The HSL sort algorithms are at the mercy of `Chrome V8s` internal `Array.sort` implementations — believed to be `Tim Sort` which has a worst case complexity of `O(N)`.
 
@@ -81,7 +81,7 @@ Once the image has been generated and ordered, using `Sharp`, the image is shape
 
 The frontend is implemented using `React.JS`. The core goal of it is to query the backend for a generated image created to specification determined by the user of the web application.
 
-This frontend is has two main components that build up the core functionality.
+This frontend has two main components that build up the core functionality.
 
 The first being the `Configurator` component that takes in a specified `height`, `width`, and `ordering`. These values are then saved to a global state in the `React.JS` application using a combination of `hooks`, and `context` APIs to be made available to other components. Using the `hooks` in combination with `context` APIs was far less complicated than setting up a `Redux` store.
 
