@@ -1,4 +1,4 @@
-From node:14
+FROM node:14-alpine
 
 WORKDIR /usr/src/app
 
@@ -9,4 +9,4 @@ RUN npm run install-api
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+ENTRYPOINT npm run start
