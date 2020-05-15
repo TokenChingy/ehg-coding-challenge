@@ -9,4 +9,4 @@ RUN npm run install-api
 
 EXPOSE 3000
 
-CMD ["node", "start"]
+CMD ["npm", "start"]
