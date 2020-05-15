@@ -31,12 +31,8 @@ const MainLayout = () => {
       <NavBar />
       <Router>
         <Switch>
-          <Route exact path="/">
-            <MainPage />
-          </Route>
-          <Route>
-            <NotFoundPage />
-          </Route>
+          <Route exact path="/" component={MainPage} />
+          <Route component={NotFoundPage} />
         </Switch>
       </Router>
       <Footer />

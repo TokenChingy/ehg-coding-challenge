@@ -56,9 +56,7 @@ const App = () => {
     <StateProvider initialState={initialState} reducer={reducer}>
       <Router>
         <Switch>
-          <Route>
-            <MainLayout />
-          </Route>
+          <Route component={MainLayout} />
         </Switch>
       </Router>
     </StateProvider>

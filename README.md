@@ -77,6 +77,8 @@ The image generation has `O(N^3)` complexity due to the 3 deep nested `for` loop
 
 Once the image has been generated and ordered, using `Sharp`, the image is shaped into the correct dimensions with 3 channels (since alpha doesn't exist in the `15 bit high colour space`), encoded as a `png` and the piped back into the response to the frontend for consumption as a `blob`.
 
+It's to be noted as well, due to the complexity of the image generation process, caching the images for later use is important. When a client requests an already generated image, they will be served the cached copy as reading from memory is always faster than generating and ordering an image. This does have a small cost though, the memory footprint of the API will be slightly larger, fortunately there are not too many combinations and the images are not all too big.
+
 #### Frontend
 
 The frontend is implemented using `React.JS`. The core goal of it is to query the backend for a generated image created to specification determined by the user of the web application.
@@ -86,8 +88,3 @@ This frontend has two main components that build up the core functionality.
 The first being the `Configurator` component that takes in a specified `height`, `width`, and `ordering`. These values are then saved to a global state in the `React.JS` application using a combination of `hooks`, and `context` APIs to be made available to other components. Using the `hooks` in combination with `context` APIs was far less complicated than setting up a `Redux` store.
 
 The second component is the `GeneratedImage` component. This component takes the image parameters and on an effect (`useEffect` hook), will query the backend using `fetch` through a `POST` request and await the response. Once the response is received and it's determined that it is a `blob`, an `<img />` is updated with a local `url` to the blob and the result is rendered to the user.
-
-Apart from the two core components that make up the frontend, there are auxillary components that were built to style the web application to provide a more pleasant UI/UX. These components encompass:
-
-- Routing for SPAs
-- The use of layouts and pages with nested routing
