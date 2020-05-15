@@ -13,7 +13,7 @@ import { StateProvider } from "./State";
 const App = () => {
   // Initiate the global state defaults.
   const initialState = {
-    darkMode: true,
+    darkMode: JSON.parse(localStorage.getItem("darkMode")), // Get the state from localStorage, it's okay if it is undefined.
     imageHeight: 128,
     imageWidth: 256,
     orderingMethod: "hue",
@@ -23,6 +23,9 @@ const App = () => {
   const reducer = (state, action) => {
     switch (action.type) {
       case "setDarkMode":
+        // Set the state to localStorage.
+        localStorage.setItem("darkMode", JSON.stringify(action.newDarkMode));
+
         return {
           ...state,
           darkMode: action.newDarkMode,

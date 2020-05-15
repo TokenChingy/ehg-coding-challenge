@@ -1,7 +1,7 @@
 /**
  * Import dependencies.
  */
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 
 import { StateContext } from "../State";
 
@@ -21,13 +21,6 @@ const NavBar = () => {
     });
   };
 
-  // Probably should do this further up the tree, but here will do.
-  // Toggle the `dark` class on the body tag.
-  useEffect(() => {
-    if (darkMode) document.body.classList.add("dark");
-    else document.body.classList.remove("dark");
-  });
-
   return (
     <header className="navbar" style={{ marginBottom: "3.2rem" }}>
       <div className="container">
@@ -39,7 +32,7 @@ const NavBar = () => {
           <nav>
             <ul className="nav">
               <li className="nav-item">
-                {/* Light/Dark toggle */}
+                {/* Light/Dark toggle, persists with localStorage */}
                 <div
                   className="custom-form-control switch u-flex-ai-c"
                   style={{ margin: "auto 0" }}
@@ -49,9 +42,10 @@ const NavBar = () => {
                     className="custom-form-input"
                     type="checkbox"
                     onChange={(event) => handleDarkMode()}
+                    checked={!darkMode}
                   />
                   <label className="custom-form-label" htmlFor="dark-mode">
-                    Light/Dark
+                    Dark/Light
                   </label>
                 </div>
               </li>
