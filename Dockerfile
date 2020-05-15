@@ -4,8 +4,8 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install-client
-RUN npm install-api
+RUN npm run install-client
+RUN npm run install-api
 
 EXPOSE 3000
 
