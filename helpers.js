@@ -95,48 +95,26 @@ const fisherYatesShuffle = (array) => {
  * Function to return all the 15 bit high colours in an array.
  */
 const generate15BitColours = () => {
-  // Our array to store 32768 colours.
-  const colours = new Array(32768);
+  // Create an array of 32768 values, we're using bitwise ops as
+  // it'll allow Chrome V8 to optimise.
+  const colours = new Array(1 << 15);
 
-  // Counter for the current colour.
-  let colour = 0;
-
-  // Our colour channel intensities.
-  let blueChannel = 0;
-  let redChannel = 0;
-  let greenChannel = 0;
-
-  // Generate the intensities for each channel in increments of 8.
-  // The complexity of this is O(N^3).
-  for (let i = 0; i < 32; i++) {
-    // Increment our red channel intensity.
-    redChannel += 8;
-
-    for (let j = 0; j < 32; j++) {
-      // Increment our green channel intensity.
-      greenChannel += 8;
-
-      for (let k = 0; k < 32; k++) {
-        // Increment our blue channel intensity.
-        blueChannel += 8;
-
-        // Assign the colour to the array of colours.
-        colours[colour] = [redChannel - 1, greenChannel - 1, blueChannel - 1];
-
-        // Increment the colour counter.
-        colour++;
-      }
-
-      // Reset our blue channel intensity once we reach 256.
-      blueChannel = 0;
-    }
-
-    // Reset our green channel intensity once we reach 256.
-    greenChannel = 0;
+  // Create our multidimensional array.
+  for (let i = 0; i < 1 << 15; i++) {
+    colours[i] = new Array(3);
   }
 
-  // We don't need to reset our red channel intensity as we have all 32768 colours.
-  // Return a flattened Buffer.
+  // Lets shift our way into the colours we want.
+  for (let i = 0; i < 1 << 15; i++) {
+    const r = (i & ((1 << 5) - 1)) * 8 + 7;
+    const g = ((i >> 5) & ((1 << 5) - 1)) * 8 + 7;
+    const b = ((i >> 10) & ((1 << 5) - 1)) * 8 + 7;
+
+    colours[i][0] = r;
+    colours[i][1] = g;
+    colours[i][2] = b;
+  }
+
   return colours;
 };
 
