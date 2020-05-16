@@ -73,7 +73,7 @@ The backend component (more of a microservice) is built using `Node.JS` utilizin
 
 Only one route exists in this backend and that is a `POST` route called `/colours`. This route is responsible for generating the image of correct size and correct ordering as per client request.
 
-The image generation has `O(N^3)` complexity due to the 3 deep nested `for` loops. Generating a random noise from the colours uses the `Fisher Yates Shuffling Algorithm` and is implemented with `O(N)` complexity. The HSL sort algorithms are at the mercy of `Chrome V8s` internal `Array.sort` implementations — believed to be `Tim Sort` which has a worst case complexity of `O(N)`.
+The image generation was `O(N^3)` complexity due to the 3 deep nested `for` loops, however after submitting this, I ended up spending some time working on a very optimized solution, the algorithm now is O(2N) and uses bitwise operations to generate the colours. Generating a random noise from the colours uses the `Fisher Yates Shuffling Algorithm` and is implemented with `O(N)` complexity. The HSL sort algorithms are at the mercy of `Chrome V8s` internal `Array.sort` implementations — believed to be `Tim Sort` which has a worst case complexity of `O(N)`.
 
 Once the image has been generated and ordered, using `Sharp`, the image is shaped into the correct dimensions with 3 channels (since alpha doesn't exist in the `15 bit high colour space`), encoded as a `png` and the piped back into the response to the frontend for consumption as a `blob`.
 

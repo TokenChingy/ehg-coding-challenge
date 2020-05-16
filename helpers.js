@@ -106,10 +106,22 @@ const generate15BitColours = () => {
 
   // Lets shift our way into the colours we want.
   for (let i = 0; i < 1 << 15; i++) {
+    // Increment channel, step by 8, repeat once 255 is reached.
+    // ((1 << 5) - 1) === 31. Which acts as a looping counter for i.
+    // Once 32 is reached, which when multiplied by 8 then add 7, will give you a max of 255.
     const r = (i & ((1 << 5) - 1)) * 8 + 7;
+
+    // Increment channel, step by 8, repeat once 255 is reached.
+    // Only begins incrementing when i === 32.
+    // (32 >> 5) === 1. When you & 32 with 31, it produces 1 until you get to 64.
     const g = ((i >> 5) & ((1 << 5) - 1)) * 8 + 7;
+
+    // Increment channel, step by 8, until 255.
+    // Only begin incrementing when i === 1024.
+    // (1024 >> 10) === 1.
     const b = ((i >> 10) & ((1 << 5) - 1)) * 8 + 7;
 
+    // Assign the intensities to their respective channels.
     colours[i][0] = r;
     colours[i][1] = g;
     colours[i][2] = b;
