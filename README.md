@@ -69,7 +69,7 @@ So in the end the solution involved building a small backend (without a database
 
 #### Backend
 
-The backend component (more of a microservice) is built using `Node.JS` utilizing the `Express.JS` framework, common `ExpresS.JS` middleware, and `Sharp` — an image processing library for `Node.JS`.
+The backend component (more of a microservice) is built using `Node.JS` utilizing the `Express.JS` framework, common `Express.JS` middleware, and `Sharp` — an image processing library for `Node.JS`.
 
 Only one route exists in this backend and that is a `POST` route called `/colours`. This route is responsible for generating the image of correct size and correct ordering as per client request.
 
